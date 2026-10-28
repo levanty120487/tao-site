@@ -22,6 +22,7 @@ import {
 import {
   Check,
   CheckCircle2,
+  ExternalLink,
   Eye,
   Layers,
   Monitor,
@@ -67,6 +68,7 @@ export function SubdomainForm() {
   
   // State for preview modal
   const [previewTemplate, setPreviewTemplate] = useState<PortalTemplate | null>(null);
+  const [previewSubpagePath, setPreviewSubpagePath] = useState<string>("/");
   const [previewDevice, setPreviewDevice] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
 
@@ -83,7 +85,15 @@ export function SubdomainForm() {
     e.preventDefault();
     e.stopPropagation();
     setPreviewTemplate(tpl);
+    setPreviewSubpagePath("/");
   };
+
+  // Determine current component to render in preview modal
+  const previewSlug = previewSubpagePath.replace(/^\//, "");
+  const CurrentPreviewComponent =
+    previewTemplate && previewSlug && previewTemplate.subpages?.[previewSlug]
+      ? previewTemplate.subpages[previewSlug].component
+      : previewTemplate?.component;
 
   return (
     <>
@@ -210,7 +220,7 @@ export function SubdomainForm() {
                 Chọn Mẫu Giao Diện Cổng Thành Phần
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                Mỗi mẫu có cấu trúc bố cục chuyên biệt kèm bộ dữ liệu demo sinh động
+                Mỗi mẫu có cấu trúc bố cục kèm hệ thống các chuyên trang riêng biệt (tin tức, văn bản, tra cứu...)
               </p>
             </div>
             <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200 w-fit">
@@ -300,7 +310,7 @@ export function SubdomainForm() {
                         onClick={(e) => handleOpenPreview(tpl, e)}
                         className="flex-1 text-xs h-8 text-slate-700 hover:text-blue-700 hover:border-blue-300 hover:bg-blue-50 font-medium"
                       >
-                        <Eye className="w-3.5 h-3.5 mr-1 text-blue-600" /> Xem demo
+                        <Eye className="w-3.5 h-3.5 mr-1 text-blue-600" /> Xem demo & menu
                       </Button>
 
                       <Button
@@ -349,7 +359,7 @@ export function SubdomainForm() {
       </form>
 
       {/* MODAL LIVE PREVIEW */}
-      {previewTemplate && (
+      {previewTemplate && CurrentPreviewComponent && (
         <Dialog open={!!previewTemplate} onOpenChange={(open) => !open && setPreviewTemplate(null)}>
           <DialogContent className="sm:max-w-6xl w-[96vw] max-h-[92vh] flex flex-col p-0 overflow-hidden rounded-2xl border-slate-300">
             {/* Modal Header */}
@@ -368,7 +378,7 @@ export function SubdomainForm() {
                     </h3>
                   </div>
                   <p className="text-xs text-slate-400">
-                    Bố cục mẫu trực quan kèm dữ liệu minh họa sinh động
+                    Bấm trực tiếp vào menu bên dưới để chuyển qua lại giữa Trang chủ, Tin tức, Văn bản...
                   </p>
                 </div>
               </div>
@@ -423,6 +433,35 @@ export function SubdomainForm() {
               </div>
             </div>
 
+            {/* Subpage Quick Bar */}
+            <div className="bg-slate-800/90 text-white px-4 py-2 flex flex-wrap items-center gap-2 border-b border-slate-700 text-xs">
+              <span className="text-slate-400 font-semibold mr-1">Chuyển nhanh trang:</span>
+              <button
+                type="button"
+                onClick={() => setPreviewSubpagePath("/")}
+                className={`px-3 py-1 rounded-md transition-all font-semibold ${
+                  previewSubpagePath === "/" ? "bg-blue-600 text-white" : "bg-slate-700 hover:bg-slate-600 text-slate-300"
+                }`}
+              >
+                Trang chủ
+              </button>
+              {previewTemplate.subpages &&
+                Object.entries(previewTemplate.subpages).map(([slug, sub]) => (
+                  <button
+                    key={slug}
+                    type="button"
+                    onClick={() => setPreviewSubpagePath(`/${slug}`)}
+                    className={`px-3 py-1 rounded-md transition-all font-semibold ${
+                      previewSubpagePath === `/${slug}`
+                        ? "bg-blue-600 text-white"
+                        : "bg-slate-700 hover:bg-slate-600 text-slate-300"
+                    }`}
+                  >
+                    {sub.name}
+                  </button>
+                ))}
+            </div>
+
             {/* Modal Body / Live Preview Frame */}
             <div className="flex-1 overflow-y-auto bg-slate-200/70 p-2 md:p-4 flex justify-center">
               <div
@@ -435,11 +474,13 @@ export function SubdomainForm() {
                 }`}
               >
                 {/* Live Template Component Render */}
-                <previewTemplate.component
+                <CurrentPreviewComponent
                   subdomain={subdomain || "demo-portal"}
                   title={title || `Cổng Thành Phần Mẫu`}
                   emoji={icon || "🏛️"}
                   description={previewTemplate.description}
+                  activePath={previewSubpagePath}
+                  onNavigatePreview={(newPath) => setPreviewSubpagePath(newPath)}
                   isPreview={true}
                 />
               </div>
@@ -448,7 +489,7 @@ export function SubdomainForm() {
             {/* Modal Footer */}
             <div className="p-3 bg-white border-t border-slate-200 flex items-center justify-between">
               <span className="text-xs text-slate-500">
-                Mẹo: Bạn có thể cuộn trang để xem toàn bộ các khối nội dung và bố cục của mẫu này.
+                Đang xem: <b className="text-slate-800">{previewSubpagePath === "/" ? "Trang chủ" : previewSubpagePath}</b>. Các menu trên header hoạt động liên kết trực tiếp!
               </span>
               <div className="flex items-center gap-2">
                 <Button

@@ -6,6 +6,14 @@ export interface PortalTemplateProps {
   emoji?: string;
   description?: string;
   isPreview?: boolean;
+  activePath?: string; // '/', '/tin-tuc', '/van-ban', etc.
+  onNavigatePreview?: (path: string) => void;
+}
+
+export interface SubpageDefinition {
+  slug: string;
+  name: string;
+  component: React.ComponentType<PortalTemplateProps>;
 }
 
 export interface PortalTemplate {
@@ -16,5 +24,5 @@ export interface PortalTemplate {
   features: string[];
   accentColor: string;
   component: React.ComponentType<PortalTemplateProps>;
+  subpages?: Record<string, SubpageDefinition>;
 }
-
