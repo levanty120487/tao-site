@@ -1,16 +1,23 @@
 import type React from 'react';
 import type { PortalTemplate, PortalTemplateProps, SubpageDefinition } from './types';
+
+// Template 1: News Portal
 import { NewsPortalTemplate } from './portal-news';
+import { NewsLayout } from './portal-news/layout';
 import { NewsSubpage } from './portal-news/pages/news-page';
 import { NewsDocsSubpage } from './portal-news/pages/docs-page';
 import { NewsDetailPage } from './portal-news/pages/news-detail-page';
 import { NewsDocsDetailPage } from './portal-news/pages/docs-detail-page';
 
+// Template 2: Service Portal
 import { ServicePortalTemplate } from './portal-service';
+import { ServiceLayout } from './portal-service/layout';
 import { ServicesSubpage } from './portal-service/pages/services-page';
 import { ServiceTrackerSubpage } from './portal-service/pages/tracker-page';
 
+// Template 3: Department Portal
 import { DepartmentPortalTemplate } from './portal-department';
+import { DeptLayout } from './portal-department/layout';
 import { DeptAboutSubpage } from './portal-department/pages/about-page';
 import { DeptDocsSubpage } from './portal-department/pages/docs-page';
 import { DeptScheduleSubpage } from './portal-department/pages/schedule-page';
@@ -25,6 +32,7 @@ export const PORTAL_TEMPLATES: PortalTemplate[] = [
     description: 'Bố cục dạng tạp chí tin tức đa phương tiện với tin tiêu điểm, video phóng sự, dòng sự kiện và thông báo khẩn cấp.',
     features: ['Tin tiêu điểm & Trending', 'Chuyên trang Tin tức riêng (/tin-tuc)', 'Chi tiết bài viết chuẩn báo chí (/tin-tuc/[id])', 'Chi tiết văn bản pháp quy (/van-ban/[id])'],
     accentColor: 'bg-red-700',
+    layout: NewsLayout,
     component: NewsPortalTemplate,
     subpages: {
       'tin-tuc': {
@@ -53,6 +61,7 @@ export const PORTAL_TEMPLATES: PortalTemplate[] = [
     description: 'Tối ưu hóa phục vụ người dân và doanh nghiệp với thanh tìm kiếm thủ tục, tra cứu mã hồ sơ một cửa và quy trình 3 bước.',
     features: ['Chuyên trang Dịch vụ trực tuyến (/dich-vu)', 'Chuyên trang Tra cứu hồ sơ (/tra-cuu)', 'Chi tiết văn bản quy định (/van-ban/[id])', 'Tổng đài 24/7'],
     accentColor: 'bg-blue-600',
+    layout: ServiceLayout,
     component: ServicePortalTemplate,
     subpages: {
       'dich-vu': {
@@ -80,6 +89,7 @@ export const PORTAL_TEMPLATES: PortalTemplate[] = [
     description: 'Bố cục chuyên nghiệp giới thiệu cơ cấu tổ chức, ban lãnh đạo đơn vị, văn bản chỉ đạo điều hành và lịch công tác tuần.',
     features: ['Chuyên trang Giới thiệu & Cơ cấu (/gioi-thieu)', 'Chuyên trang Văn bản chỉ đạo (/van-ban)', 'Chi tiết văn bản chỉ đạo (/van-ban/[id])', 'Chuyên trang Lịch công tác (/lich-cong-tac)'],
     accentColor: 'bg-emerald-700',
+    layout: DeptLayout,
     component: DepartmentPortalTemplate,
     subpages: {
       'gioi-thieu': {

@@ -218,7 +218,7 @@ export function SubdomainForm() {
                 Chọn Mẫu Giao Diện Cổng Thành Phần
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                Mỗi mẫu có cấu trúc bố cục kèm hệ thống các chuyên trang danh sách và trang chi tiết nội dung
+                Mỗi mẫu có layout hoàn chỉnh dùng chung cho trang chủ, các chuyên trang danh mục và trang chi tiết
               </p>
             </div>
             <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200 w-fit">
@@ -268,7 +268,7 @@ export function SubdomainForm() {
                     <div className="mt-3 bg-white/10 p-2 rounded-md space-y-1.5 backdrop-blur-xs">
                       <div className="h-1.5 w-1/3 bg-white/40 rounded-sm"></div>
                       <div className="h-10 w-full bg-white/20 rounded-sm flex items-center justify-center">
-                        <span className="text-[10px] text-white/80 font-medium">Bố cục demo sinh động</span>
+                        <span className="text-[10px] text-white/80 font-medium">Layout đồng bộ Header/Footer</span>
                       </div>
                       <div className="grid grid-cols-3 gap-1">
                         <div className="h-4 bg-white/20 rounded-xs"></div>
@@ -376,7 +376,7 @@ export function SubdomainForm() {
                     </h3>
                   </div>
                   <p className="text-xs text-slate-400">
-                    Bấm trực tiếp vào các bài viết, văn bản hoặc thanh menu bên dưới để xem cả trang danh sách lẫn trang chi tiết
+                    Bố cục khung chung (Layout Header & Footer) đồng bộ cho tất cả các trang
                   </p>
                 </div>
               </div>
@@ -496,24 +496,33 @@ export function SubdomainForm() {
                     : "max-w-full"
                 }`}
               >
-                {/* Live Template Component Render */}
-                <CurrentPreviewComponent
-                  subdomain={subdomain || "demo-portal"}
-                  title={title || `Cổng Thành Phần Mẫu`}
-                  emoji={icon || "🏛️"}
-                  description={previewTemplate.description}
-                  activePath={previewSubpagePath}
-                  detailId={detailId}
-                  onNavigatePreview={(newPath: string) => setPreviewSubpagePath(newPath)}
-                  isPreview={true}
-                />
+                {/* Live Template Render wrapped in Template's Layout */}
+                {(() => {
+                  const TemplateLayout = previewTemplate.layout;
+                  const previewProps = {
+                    subdomain: subdomain || "demo-portal",
+                    title: title || `Cổng Thành Phần Mẫu`,
+                    emoji: icon || "🏛️",
+                    description: previewTemplate.description,
+                    activePath: previewSubpagePath,
+                    detailId: detailId,
+                    onNavigatePreview: (newPath: string) => setPreviewSubpagePath(newPath),
+                    isPreview: true,
+                  };
+
+                  return (
+                    <TemplateLayout {...previewProps}>
+                      <CurrentPreviewComponent {...previewProps} />
+                    </TemplateLayout>
+                  );
+                })()}
               </div>
             </div>
 
             {/* Modal Footer */}
             <div className="p-3 bg-white border-t border-slate-200 flex items-center justify-between">
               <span className="text-xs text-slate-500">
-                Đang xem: <b className="text-slate-800">{previewSubpagePath === "/" ? "Trang chủ" : previewSubpagePath}</b>. Các liên kết bài viết và văn bản đều có thể bấm để xem chi tiết!
+                Đang xem: <b className="text-slate-800">{previewSubpagePath === "/" ? "Trang chủ" : previewSubpagePath}</b>. Bố cục Header/Footer được quản lý tập trung từ Layout của Template!
               </span>
               <div className="flex items-center gap-2">
                 <Button

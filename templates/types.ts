@@ -25,6 +25,7 @@ export interface PortalTemplate {
   description: string;
   features: string[];
   accentColor: string;
+  layout: React.ComponentType<PortalTemplateProps & { children: React.ReactNode }>;
   component: React.ComponentType<PortalTemplateProps>;
   subpages?: Record<string, SubpageDefinition>;
 }

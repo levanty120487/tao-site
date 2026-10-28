@@ -39,16 +39,21 @@ export default async function SubdomainPage({
   }
 
   const template = getTemplateById(subdomainData.templateId);
+  const TemplateLayout = template.layout;
   const TemplateComponent = template.component;
 
+  const templateProps = {
+    subdomain,
+    title: subdomainData.title,
+    emoji: subdomainData.emoji,
+    description: subdomainData.description,
+    activePath: "/",
+    isPreview: false,
+  };
+
   return (
-    <TemplateComponent
-      subdomain={subdomain}
-      title={subdomainData.title}
-      emoji={subdomainData.emoji}
-      description={subdomainData.description}
-      activePath="/"
-      isPreview={false}
-    />
+    <TemplateLayout {...templateProps}>
+      <TemplateComponent {...templateProps} />
+    </TemplateLayout>
   );
 }

@@ -45,22 +45,28 @@ export default async function SubdomainSubPage({
     notFound();
   }
 
+  const template = getTemplateById(subdomainData.templateId);
   const subpage = getSubpageBySlug(subdomainData.templateId, page);
 
   if (!subpage) {
     notFound();
   }
 
+  const TemplateLayout = template.layout;
   const SubpageComponent = subpage.component;
 
+  const templateProps = {
+    subdomain,
+    title: subdomainData.title,
+    emoji: subdomainData.emoji,
+    description: subdomainData.description,
+    activePath: `/${page}`,
+    isPreview: false,
+  };
+
   return (
-    <SubpageComponent
-      subdomain={subdomain}
-      title={subdomainData.title}
-      emoji={subdomainData.emoji}
-      description={subdomainData.description}
-      activePath={`/${page}`}
-      isPreview={false}
-    />
+    <TemplateLayout {...templateProps}>
+      <SubpageComponent {...templateProps} />
+    </TemplateLayout>
   );
 }

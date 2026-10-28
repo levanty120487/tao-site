@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getSubdomainData } from "@/lib/subdomains";
 import { rootDomain } from "@/lib/utils";
-import { getSubpageBySlug } from "@/templates/registry";
+import { getSubpageBySlug, getTemplateById } from "@/templates/registry";
 
 export async function generateMetadata({
   params,
@@ -45,25 +45,30 @@ export default async function SubdomainDetailPage({
     notFound();
   }
 
+  const template = getTemplateById(subdomainData.templateId);
   const subpage = getSubpageBySlug(subdomainData.templateId, page);
 
   if (!subpage) {
     notFound();
   }
 
+  const TemplateLayout = template.layout;
   // Use specialized detail component if registered, otherwise fallback to subpage component with detailId
   const ComponentToRender = subpage.detailComponent || subpage.component;
 
+  const templateProps = {
+    subdomain,
+    title: subdomainData.title,
+    emoji: subdomainData.emoji,
+    description: subdomainData.description,
+    activePath: `/${page}/${id}`,
+    detailId: id,
+    isPreview: false,
+  };
+
   return (
-    <ComponentToRender
-      subdomain={subdomain}
-      title={subdomainData.title}
-      emoji={subdomainData.emoji}
-      description={subdomainData.description}
-      activePath={`/${page}/${id}`}
-      detailId={id}
-      isPreview={false}
-    />
+    <TemplateLayout {...templateProps}>
+      <ComponentToRender {...templateProps} />
+    </TemplateLayout>
   );
 }
-
