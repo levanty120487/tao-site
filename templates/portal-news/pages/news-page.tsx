@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import type { PortalTemplateProps } from '../../types';
 import { NewsHeader } from '../header';
 import { NewsFooter } from '../footer';
+import { NavLink } from '../../common/nav-link';
 import { 
   Bell, 
   Calendar, 
@@ -11,8 +12,7 @@ import {
   Eye, 
   Filter, 
   Newspaper, 
-  Search, 
-  Share2 
+  Search 
 } from 'lucide-react';
 
 const ALL_ARTICLES = [
@@ -93,12 +93,15 @@ export function NewsSubpage(props: PortalTemplateProps) {
         {/* Breadcrumb Bar */}
         <div className="bg-white border-b border-slate-200 py-2.5 px-4">
           <div className="max-w-7xl mx-auto flex items-center gap-2 text-xs text-slate-500">
-            <span 
-              onClick={() => props.isPreview && props.onNavigatePreview?.('/')}
+            <NavLink
+              href="/"
+              active={false}
+              isPreview={props.isPreview}
+              onNavigate={props.onNavigatePreview}
               className="hover:text-red-700 cursor-pointer"
             >
               Trang chủ
-            </span>
+            </NavLink>
             <span>/</span>
             <span className="text-red-700 font-bold">Chuyên trang Tin tức & Sự kiện</span>
           </div>
@@ -166,13 +169,19 @@ export function NewsSubpage(props: PortalTemplateProps) {
                     key={item.id}
                     className="bg-white rounded-xl border border-slate-200 hover:border-red-300 hover:shadow-md transition-all overflow-hidden flex flex-col sm:flex-row group"
                   >
-                    <div className="sm:w-60 h-44 overflow-hidden bg-slate-900 shrink-0">
+                    <NavLink
+                      href={`/tin-tuc/${item.id}`}
+                      active={false}
+                      isPreview={props.isPreview}
+                      onNavigate={props.onNavigatePreview}
+                      className="sm:w-60 h-44 overflow-hidden bg-slate-900 shrink-0 block cursor-pointer"
+                    >
                       <img
                         src={item.imageUrl}
                         alt={item.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                    </div>
+                    </NavLink>
                     <div className="p-4 flex flex-col justify-between flex-1 space-y-2">
                       <div>
                         <div className="flex items-center gap-2 mb-1.5">
@@ -183,9 +192,15 @@ export function NewsSubpage(props: PortalTemplateProps) {
                             <Calendar className="w-3 h-3" /> {item.date}
                           </span>
                         </div>
-                        <h3 className="text-sm md:text-base font-bold text-slate-900 group-hover:text-red-700 transition-colors line-clamp-2 leading-snug cursor-pointer">
+                        <NavLink
+                          href={`/tin-tuc/${item.id}`}
+                          active={false}
+                          isPreview={props.isPreview}
+                          onNavigate={props.onNavigatePreview}
+                          className="block text-sm md:text-base font-bold text-slate-900 group-hover:text-red-700 transition-colors line-clamp-2 leading-snug cursor-pointer"
+                        >
                           {item.title}
-                        </h3>
+                        </NavLink>
                         <p className="text-xs text-slate-600 mt-2 line-clamp-2 leading-relaxed">
                           {item.summary}
                         </p>
@@ -195,9 +210,15 @@ export function NewsSubpage(props: PortalTemplateProps) {
                         <span className="flex items-center gap-1">
                           <Eye className="w-3.5 h-3.5" /> {item.views} lượt xem
                         </span>
-                        <span className="text-red-700 font-bold hover:underline flex items-center gap-1 cursor-pointer">
-                          Xem chi tiết <ChevronRight className="w-3 h-3" />
-                        </span>
+                        <NavLink
+                          href={`/tin-tuc/${item.id}`}
+                          active={false}
+                          isPreview={props.isPreview}
+                          onNavigate={props.onNavigatePreview}
+                          className="text-red-700 font-bold hover:underline flex items-center gap-1 cursor-pointer"
+                        >
+                          Đọc chi tiết <ChevronRight className="w-3 h-3" />
+                        </NavLink>
                       </div>
                     </div>
                   </div>
@@ -223,15 +244,15 @@ export function NewsSubpage(props: PortalTemplateProps) {
                 <div className="space-y-3 text-xs">
                   <div className="border-b border-slate-100 pb-2">
                     <span className="text-[10px] font-bold text-red-700">Khẩn • 28/10/2026</span>
-                    <p className="font-semibold text-slate-800 hover:text-red-700 cursor-pointer mt-0.5">
+                    <NavLink
+                      href="/tin-tuc/1"
+                      active={false}
+                      isPreview={props.isPreview}
+                      onNavigate={props.onNavigatePreview}
+                      className="font-semibold text-slate-800 hover:text-red-700 cursor-pointer mt-0.5 block"
+                    >
                       Kế hoạch tổng kiểm tra rà soát an toàn thông tin hệ thống cổng
-                    </p>
-                  </div>
-                  <div className="border-b border-slate-100 pb-2">
-                    <span className="text-[10px] font-bold text-slate-500">27/10/2026</span>
-                    <p className="font-semibold text-slate-800 hover:text-red-700 cursor-pointer mt-0.5">
-                      Hướng dẫn gửi tài liệu và tổng hợp báo cáo chuyên đề quý IV
-                    </p>
+                    </NavLink>
                   </div>
                 </div>
               </div>
@@ -244,4 +265,3 @@ export function NewsSubpage(props: PortalTemplateProps) {
     </div>
   );
 }
-

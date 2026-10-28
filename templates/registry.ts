@@ -3,6 +3,8 @@ import type { PortalTemplate, PortalTemplateProps, SubpageDefinition } from './t
 import { NewsPortalTemplate } from './portal-news';
 import { NewsSubpage } from './portal-news/pages/news-page';
 import { NewsDocsSubpage } from './portal-news/pages/docs-page';
+import { NewsDetailPage } from './portal-news/pages/news-detail-page';
+import { NewsDocsDetailPage } from './portal-news/pages/docs-detail-page';
 
 import { ServicePortalTemplate } from './portal-service';
 import { ServicesSubpage } from './portal-service/pages/services-page';
@@ -21,7 +23,7 @@ export const PORTAL_TEMPLATES: PortalTemplate[] = [
     name: 'Cổng Tin Tức & Truyền Thông',
     category: 'Báo chí & Tạp chí',
     description: 'Bố cục dạng tạp chí tin tức đa phương tiện với tin tiêu điểm, video phóng sự, dòng sự kiện và thông báo khẩn cấp.',
-    features: ['Tin tiêu điểm & Trending', 'Chuyên trang Tin tức riêng (/tin-tuc)', 'Chuyên trang Văn bản riêng (/van-ban)', 'Thư viện Video'],
+    features: ['Tin tiêu điểm & Trending', 'Chuyên trang Tin tức riêng (/tin-tuc)', 'Chi tiết bài viết chuẩn báo chí (/tin-tuc/[id])', 'Chi tiết văn bản pháp quy (/van-ban/[id])'],
     accentColor: 'bg-red-700',
     component: NewsPortalTemplate,
     subpages: {
@@ -29,11 +31,13 @@ export const PORTAL_TEMPLATES: PortalTemplate[] = [
         slug: 'tin-tuc',
         name: 'Tin tức & Sự kiện',
         component: NewsSubpage,
+        detailComponent: NewsDetailPage,
       },
       'van-ban': {
         slug: 'van-ban',
         name: 'Văn bản mới',
         component: NewsDocsSubpage,
+        detailComponent: NewsDocsDetailPage,
       },
       'lien-he': {
         slug: 'lien-he',
@@ -47,7 +51,7 @@ export const PORTAL_TEMPLATES: PortalTemplate[] = [
     name: 'Cổng Dịch Vụ Công & Một Cửa',
     category: 'Hành chính & Tra cứu',
     description: 'Tối ưu hóa phục vụ người dân và doanh nghiệp với thanh tìm kiếm thủ tục, tra cứu mã hồ sơ một cửa và quy trình 3 bước.',
-    features: ['Chuyên trang Dịch vụ trực tuyến (/dich-vu)', 'Chuyên trang Tra cứu hồ sơ (/tra-cuu)', 'Chuyên trang Văn bản (/van-ban)', 'Tổng đài 24/7'],
+    features: ['Chuyên trang Dịch vụ trực tuyến (/dich-vu)', 'Chuyên trang Tra cứu hồ sơ (/tra-cuu)', 'Chi tiết văn bản quy định (/van-ban/[id])', 'Tổng đài 24/7'],
     accentColor: 'bg-blue-600',
     component: ServicePortalTemplate,
     subpages: {
@@ -65,6 +69,7 @@ export const PORTAL_TEMPLATES: PortalTemplate[] = [
         slug: 'van-ban',
         name: 'Văn bản quy định hành chính',
         component: NewsDocsSubpage,
+        detailComponent: NewsDocsDetailPage,
       },
     },
   },
@@ -73,7 +78,7 @@ export const PORTAL_TEMPLATES: PortalTemplate[] = [
     name: 'Cổng Phòng Ban & Cơ Quan',
     category: 'Đơn vị & Doanh nghiệp',
     description: 'Bố cục chuyên nghiệp giới thiệu cơ cấu tổ chức, ban lãnh đạo đơn vị, văn bản chỉ đạo điều hành và lịch công tác tuần.',
-    features: ['Chuyên trang Giới thiệu & Cơ cấu (/gioi-thieu)', 'Chuyên trang Văn bản chỉ đạo (/van-ban)', 'Chuyên trang Lịch công tác (/lich-cong-tac)'],
+    features: ['Chuyên trang Giới thiệu & Cơ cấu (/gioi-thieu)', 'Chuyên trang Văn bản chỉ đạo (/van-ban)', 'Chi tiết văn bản chỉ đạo (/van-ban/[id])', 'Chuyên trang Lịch công tác (/lich-cong-tac)'],
     accentColor: 'bg-emerald-700',
     component: DepartmentPortalTemplate,
     subpages: {
@@ -86,6 +91,7 @@ export const PORTAL_TEMPLATES: PortalTemplate[] = [
         slug: 'van-ban',
         name: 'Văn bản chỉ đạo điều hành',
         component: DeptDocsSubpage,
+        detailComponent: NewsDocsDetailPage,
       },
       'lich-cong-tac': {
         slug: 'lich-cong-tac',

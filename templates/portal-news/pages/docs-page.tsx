@@ -4,19 +4,18 @@ import React, { useState } from 'react';
 import type { PortalTemplateProps } from '../../types';
 import { NewsHeader } from '../header';
 import { NewsFooter } from '../footer';
+import { NavLink } from '../../common/nav-link';
 import { 
-  Calendar, 
   Download, 
   Eye, 
-  FileCheck, 
   FileSpreadsheet, 
-  FileText, 
   Filter, 
   Search 
 } from 'lucide-react';
 
 const DOCUMENTS_LIST = [
   {
+    id: 1,
     code: '158/QĐ-UBND',
     date: '28/10/2026',
     title: 'Quyết định phê duyệt Đề án chuyển đổi số toàn diện các cổng thành phần giai đoạn 2026 - 2030',
@@ -26,6 +25,7 @@ const DOCUMENTS_LIST = [
     fileSize: '2.4 MB',
   },
   {
+    id: 2,
     code: '95/TB-TTĐT',
     date: '27/10/2026',
     title: 'Thông báo kết luận cuộc họp triển khai kết nối dữ liệu hành chính công và cơ sở dữ liệu chuyên ngành',
@@ -35,6 +35,7 @@ const DOCUMENTS_LIST = [
     fileSize: '850 KB',
   },
   {
+    id: 3,
     code: '42/KH-STTTT',
     date: '25/10/2026',
     title: 'Kế hoạch tổ chức diễn tập ứng cứu sự cố an toàn thông tin mạng trên địa bàn năm 2026',
@@ -44,6 +45,7 @@ const DOCUMENTS_LIST = [
     fileSize: '1.2 MB',
   },
   {
+    id: 4,
     code: '210/BC-VP',
     date: '22/10/2026',
     title: 'Báo cáo tình hình xử lý văn bản điện tử và mức độ hài lòng của công dân tháng 10/2026',
@@ -53,6 +55,7 @@ const DOCUMENTS_LIST = [
     fileSize: '3.1 MB',
   },
   {
+    id: 5,
     code: '114/QĐ-TTĐT',
     date: '19/10/2026',
     title: 'Quyết định ban hành Quy chế bảo đảm an toàn, an ninh mạng cho Cổng thông tin thành viên',
@@ -82,12 +85,15 @@ export function NewsDocsSubpage(props: PortalTemplateProps) {
         {/* Breadcrumb Bar */}
         <div className="bg-white border-b border-slate-200 py-2.5 px-4">
           <div className="max-w-7xl mx-auto flex items-center gap-2 text-xs text-slate-500">
-            <span 
-              onClick={() => props.isPreview && props.onNavigatePreview?.('/')}
+            <NavLink
+              href="/"
+              active={false}
+              isPreview={props.isPreview}
+              onNavigate={props.onNavigatePreview}
               className="hover:text-red-700 cursor-pointer"
             >
               Trang chủ
-            </span>
+            </NavLink>
             <span>/</span>
             <span className="text-red-700 font-bold">Chuyên trang Văn bản Chỉ đạo Điều hành</span>
           </div>
@@ -164,15 +170,29 @@ export function NewsDocsSubpage(props: PortalTemplateProps) {
                     filtered.map((item, index) => (
                       <tr key={index} className="hover:bg-slate-50 transition-colors">
                         <td className="py-3.5 px-4 font-mono font-bold text-red-800 whitespace-nowrap">
-                          {item.code}
+                          <NavLink
+                            href={`/van-ban/${item.id}`}
+                            active={false}
+                            isPreview={props.isPreview}
+                            onNavigate={props.onNavigatePreview}
+                            className="hover:underline"
+                          >
+                            {item.code}
+                          </NavLink>
                         </td>
                         <td className="py-3.5 px-4 text-slate-500 whitespace-nowrap">
                           {item.date}
                         </td>
                         <td className="py-3.5 px-4">
-                          <div className="font-semibold text-slate-900 hover:text-red-700 cursor-pointer transition-colors leading-relaxed">
+                          <NavLink
+                            href={`/van-ban/${item.id}`}
+                            active={false}
+                            isPreview={props.isPreview}
+                            onNavigate={props.onNavigatePreview}
+                            className="font-semibold text-slate-900 hover:text-red-700 cursor-pointer transition-colors leading-relaxed block"
+                          >
                             {item.title}
-                          </div>
+                          </NavLink>
                           <div className="text-[10px] text-slate-400 mt-0.5">
                             Loại: {item.type} • Đơn vị soạn thảo: {item.department}
                           </div>
@@ -181,10 +201,16 @@ export function NewsDocsSubpage(props: PortalTemplateProps) {
                           {item.signer}
                         </td>
                         <td className="py-3.5 px-4 text-center whitespace-nowrap">
-                          <button className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-red-50 text-red-700 hover:bg-red-700 hover:text-white font-semibold transition-colors">
+                          <NavLink
+                            href={`/van-ban/${item.id}`}
+                            active={false}
+                            isPreview={props.isPreview}
+                            onNavigate={props.onNavigatePreview}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-red-50 text-red-700 hover:bg-red-700 hover:text-white font-semibold transition-colors"
+                          >
                             <Download className="w-3.5 h-3.5" />
                             <span>{item.fileSize}</span>
-                          </button>
+                          </NavLink>
                         </td>
                       </tr>
                     ))
@@ -200,4 +226,3 @@ export function NewsDocsSubpage(props: PortalTemplateProps) {
     </div>
   );
 }
-

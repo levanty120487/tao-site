@@ -14,27 +14,16 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import {
   Check,
   CheckCircle2,
-  ExternalLink,
   Eye,
-  Layers,
   Monitor,
-  Phone,
-  Search,
   Smartphone,
-  Smile,
   Sparkles,
   Tablet,
-  X,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import {
   EmojiPicker,
   EmojiPickerContent,
@@ -88,12 +77,21 @@ export function SubdomainForm() {
     setPreviewSubpagePath("/");
   };
 
-  // Determine current component to render in preview modal
-  const previewSlug = previewSubpagePath.replace(/^\//, "");
-  const CurrentPreviewComponent =
-    previewTemplate && previewSlug && previewTemplate.subpages?.[previewSlug]
-      ? previewTemplate.subpages[previewSlug].component
-      : previewTemplate?.component;
+  // Parse path to handle listing and detail in preview modal
+  const pathParts = previewSubpagePath.replace(/^\//, "").split("/");
+  const baseSlug = pathParts[0] || "";
+  const detailId = pathParts[1] || "";
+
+  const subpageDef = previewTemplate?.subpages?.[baseSlug];
+  let CurrentPreviewComponent: any = previewTemplate?.component;
+
+  if (subpageDef) {
+    if (detailId && subpageDef.detailComponent) {
+      CurrentPreviewComponent = subpageDef.detailComponent;
+    } else {
+      CurrentPreviewComponent = subpageDef.component;
+    }
+  }
 
   return (
     <>
@@ -220,7 +218,7 @@ export function SubdomainForm() {
                 Chọn Mẫu Giao Diện Cổng Thành Phần
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                Mỗi mẫu có cấu trúc bố cục kèm hệ thống các chuyên trang riêng biệt (tin tức, văn bản, tra cứu...)
+                Mỗi mẫu có cấu trúc bố cục kèm hệ thống các chuyên trang danh sách và trang chi tiết nội dung
               </p>
             </div>
             <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200 w-fit">
@@ -310,7 +308,7 @@ export function SubdomainForm() {
                         onClick={(e) => handleOpenPreview(tpl, e)}
                         className="flex-1 text-xs h-8 text-slate-700 hover:text-blue-700 hover:border-blue-300 hover:bg-blue-50 font-medium"
                       >
-                        <Eye className="w-3.5 h-3.5 mr-1 text-blue-600" /> Xem demo & menu
+                        <Eye className="w-3.5 h-3.5 mr-1 text-blue-600" /> Xem demo & trang con
                       </Button>
 
                       <Button
@@ -378,7 +376,7 @@ export function SubdomainForm() {
                     </h3>
                   </div>
                   <p className="text-xs text-slate-400">
-                    Bấm trực tiếp vào menu bên dưới để chuyển qua lại giữa Trang chủ, Tin tức, Văn bản...
+                    Bấm trực tiếp vào các bài viết, văn bản hoặc thanh menu bên dưới để xem cả trang danh sách lẫn trang chi tiết
                   </p>
                 </div>
               </div>
@@ -433,13 +431,13 @@ export function SubdomainForm() {
               </div>
             </div>
 
-            {/* Subpage Quick Bar */}
-            <div className="bg-slate-800/90 text-white px-4 py-2 flex flex-wrap items-center gap-2 border-b border-slate-700 text-xs">
-              <span className="text-slate-400 font-semibold mr-1">Chuyển nhanh trang:</span>
+            {/* Subpage & Detail Quick Bar */}
+            <div className="bg-slate-800/90 text-white px-4 py-2 flex flex-wrap items-center gap-2 border-b border-slate-700 text-xs overflow-x-auto">
+              <span className="text-slate-400 font-semibold mr-1 shrink-0">Demo nhanh các trang:</span>
               <button
                 type="button"
                 onClick={() => setPreviewSubpagePath("/")}
-                className={`px-3 py-1 rounded-md transition-all font-semibold ${
+                className={`px-3 py-1 rounded-md transition-all font-semibold shrink-0 ${
                   previewSubpagePath === "/" ? "bg-blue-600 text-white" : "bg-slate-700 hover:bg-slate-600 text-slate-300"
                 }`}
               >
@@ -451,7 +449,7 @@ export function SubdomainForm() {
                     key={slug}
                     type="button"
                     onClick={() => setPreviewSubpagePath(`/${slug}`)}
-                    className={`px-3 py-1 rounded-md transition-all font-semibold ${
+                    className={`px-3 py-1 rounded-md transition-all font-semibold shrink-0 ${
                       previewSubpagePath === `/${slug}`
                         ? "bg-blue-600 text-white"
                         : "bg-slate-700 hover:bg-slate-600 text-slate-300"
@@ -460,6 +458,31 @@ export function SubdomainForm() {
                     {sub.name}
                   </button>
                 ))}
+
+              {/* Quick links to demo detail pages */}
+              {previewTemplate.subpages?.['tin-tuc']?.detailComponent && (
+                <button
+                  type="button"
+                  onClick={() => setPreviewSubpagePath("/tin-tuc/1")}
+                  className={`px-2.5 py-1 rounded-md transition-all font-semibold shrink-0 border border-red-500/40 text-red-300 hover:bg-red-900/40 ${
+                    previewSubpagePath === "/tin-tuc/1" ? "bg-red-700 text-white font-bold" : ""
+                  }`}
+                >
+                  📄 Demo Chi tiết Tin tức (/tin-tuc/1)
+                </button>
+              )}
+
+              {previewTemplate.subpages?.['van-ban']?.detailComponent && (
+                <button
+                  type="button"
+                  onClick={() => setPreviewSubpagePath("/van-ban/1")}
+                  className={`px-2.5 py-1 rounded-md transition-all font-semibold shrink-0 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/40 ${
+                    previewSubpagePath === "/van-ban/1" ? "bg-emerald-700 text-white font-bold" : ""
+                  }`}
+                >
+                  📑 Demo Chi tiết Văn bản (/van-ban/1)
+                </button>
+              )}
             </div>
 
             {/* Modal Body / Live Preview Frame */}
@@ -480,7 +503,8 @@ export function SubdomainForm() {
                   emoji={icon || "🏛️"}
                   description={previewTemplate.description}
                   activePath={previewSubpagePath}
-                  onNavigatePreview={(newPath) => setPreviewSubpagePath(newPath)}
+                  detailId={detailId}
+                  onNavigatePreview={(newPath: string) => setPreviewSubpagePath(newPath)}
                   isPreview={true}
                 />
               </div>
@@ -489,7 +513,7 @@ export function SubdomainForm() {
             {/* Modal Footer */}
             <div className="p-3 bg-white border-t border-slate-200 flex items-center justify-between">
               <span className="text-xs text-slate-500">
-                Đang xem: <b className="text-slate-800">{previewSubpagePath === "/" ? "Trang chủ" : previewSubpagePath}</b>. Các menu trên header hoạt động liên kết trực tiếp!
+                Đang xem: <b className="text-slate-800">{previewSubpagePath === "/" ? "Trang chủ" : previewSubpagePath}</b>. Các liên kết bài viết và văn bản đều có thể bấm để xem chi tiết!
               </span>
               <div className="flex items-center gap-2">
                 <Button
